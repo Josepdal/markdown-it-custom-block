@@ -16,13 +16,13 @@ module.exports = function plugin (md, options) {
       const block = state.src.slice(startPos, maxPos)
       let pointer = { line: startLine, pos: startPos }
 
-      // XXX wtf
-      if (startLine !== 0) {
-        let prevLineStartPos = state.bMarks[startLine - 1] +
-              state.tShift[startLine - 1]
-        let prevLineMaxPos = state.eMarks[startLine - 1]
-        if (prevLineMaxPos > prevLineStartPos) return false
-      }
+      // Previous line break check
+      // if (startLine !== 0) {
+      //   let prevLineStartPos = state.bMarks[startLine - 1] +
+      //         state.tShift[startLine - 1]
+      //   let prevLineMaxPos = state.eMarks[startLine - 1]
+      //   if (prevLineMaxPos > prevLineStartPos) return false
+      // }
 
       // Check if it's @[tag](arg)
       if (state.src.charCodeAt(pointer.pos) !== 0x40/* @ */ ||
@@ -41,12 +41,11 @@ module.exports = function plugin (md, options) {
       pointer.pos += all.length
 
       // Block embed must be at end of input or the next line must be blank.
-      // TODO something can be done here to make it work without blank lines
-      if (endLine !== pointer.line + 1) {
-        let nextLineStartPos = state.bMarks[pointer.line + 1] + state.tShift[pointer.line + 1]
-        let nextLineMaxPos = state.eMarks[pointer.line + 1]
-        if (nextLineMaxPos > nextLineStartPos) return false
-      }
+      // if (endLine !== pointer.line + 1) {
+      //   let nextLineStartPos = state.bMarks[pointer.line + 1] + state.tShift[pointer.line + 1]
+      //   let nextLineMaxPos = state.eMarks[pointer.line + 1]
+      //   if (nextLineMaxPos > nextLineStartPos) return false
+      // }
 
       if (pointer.line >= endLine) return false
 

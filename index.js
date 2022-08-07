@@ -3,8 +3,12 @@ const embedRE = /@\[([\w-]+)\]\(([\s\S]+)\)/im
 module.exports = function plugin (md, options) {
   md.renderer.rules.custom = function tokenizeBlock (tokens, idx) {
     const { tag, arg } = tokens[idx].info
-    if (!tag) return ''
-    return options[tag](arg) + '\n'
+    if (!tag || !arg) return "";
+    try {
+      return options[tag](arg) + "\n";
+    } catch (e) {
+      return "";
+    }
   }
 
   md.block.ruler.before(
